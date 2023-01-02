@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import *
+import os
+
 
 #Gatos
 gatos = 0
@@ -42,7 +44,9 @@ root.columnconfigure(0, weight=10)
 root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=1)
 
-gatoimage = PhotoImage(file="./image/gato1.png")
+
+
+gatoimage = PhotoImage(file="image\gato1.png")
 
 
 #ScreenSize
