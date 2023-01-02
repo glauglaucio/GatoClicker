@@ -34,7 +34,6 @@ def catlover():
     botao2.config(state=DISABLED)
     cats()
 
-#dasdasdasdas
 #Prelúdio
 pastaAtual = os.path.dirname(__file__)
 
