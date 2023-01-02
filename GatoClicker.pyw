@@ -36,17 +36,17 @@ def catlover():
 
 
 #Prelúdio
+pastaAtual = os.path.dirname(__file__)
+
 root = tk.Tk()
 root.title("GatoClicker")
-root.iconbitmap("image\png.ico")
+root.iconbitmap(f"{pastaAtual}\image\png.ico")
 root.configure(background="black")
 root.columnconfigure(0, weight=10)
 root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=1)
 
-
-
-gatoimage = PhotoImage(file="image\gato1.png")
+gatoimage = PhotoImage(file=f"{pastaAtual}\image\gato1.png")
 
 
 #ScreenSize
