@@ -1,0 +1,8 @@
+Objetivo principal: ser um jogo clicker onde o objetivo é fazer o número de gatos ultrapassar a população mundial (8.000.000.000) o mais rápido possível.
+
+Requisitos:
+-Ter elementos clickers e idles.
+-Ter um cronómetro.
+-Formas de aumentar a produção ( UPGRADES ).
+-Ter um fim.
+-Ser no mínimo balanceado
