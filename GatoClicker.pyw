@@ -7,8 +7,8 @@ import os
 gatos = gsegundo = leite = racao = h = s = m = 0
 AmantGatos = 1
 catloverValor = 50
-leiteValor = 100
-racaoValor = 1000
+leiteValor = 50
+racaoValor = 150
 
 stop = 0
 
@@ -65,10 +65,7 @@ def catmilk():
 
     leite += 1
     gatos -= leiteValor
-    if leite == 1:
-        leiteValor = 150
-    else:
-        leiteValor = int(100*(leite)**1.1)
+    leiteValor = int(50*(leite)**1.1+(50/leite))
     cats()
 
 def catrac():
@@ -76,10 +73,7 @@ def catrac():
     
     racao += 1
     gatos -= racaoValor
-    if racao == 1:
-        racaoValor = 1500
-    else:
-        racaoValor = int(1000*(racao)**1.2)
+    racaoValor = int(150*(racao)**1.2+(150/racao))
     cats()
 
 
