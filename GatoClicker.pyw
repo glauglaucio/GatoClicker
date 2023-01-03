@@ -136,7 +136,7 @@ root.maxsize(clickerw, clickerh)
 root.resizable(False,True)
 
 
-#HUD
+#UI
 label2 = tk.Label(
     root,bg="red",fg="black",border=50,
     font=(None,20),text="CLIQUE NO GATO"
