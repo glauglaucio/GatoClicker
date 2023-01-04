@@ -3,39 +3,76 @@ from tkinter import *
 import os
 
 
-#Multiplicadores e Funções
-gatos = endgame = gsegundo = leite = racao = sard = h = s = m = 0
-AmantGatos = 1
-catloverValor = 50
-leiteValor = 10
-racaoValor = 100
-sardValor = 1000
+#Variaveis
+gatos = clique = resultado = endgame = gsegundo = leite = racao = sard = cientista = h = s = m = leiteValor = catloverValor = racaoValor = sardValor = cientistaValor =stop = 0
+AmantGatos = Qtd = cQtd = lp = rp = sp = 1
 
-stop = 0
 
+#Função Principal
 def cats():
-    global gsegundo, stop
-    gsegundo = (leite*(1)) + (racao*(10) + sard*(100))
+    global gsegundo, stop, sardValor, leiteValor, racaoValor, catloverValor, cientistaValor, clique
 
-    label1.config(text=f"{gatos:,}\nGatos")
-    label6.config(text=f"Gatos por Segundo: {gsegundo:,}")
-    label5.config(text=f"Gatos por Cliques: {AmantGatos:,}")
+    #Produção por Segundo
+    gsegundo = (leite*(1)) + (racao*(10)) + (sard*(100))
+    clique = (1+cientista)*AmantGatos
 
-    botao2.config(text=f'Amante de Gatos / Click x{AmantGatos}\nCusto: {catloverValor:,}\nGanhe 2x mais gatos por clique.')
-    botao3.config(text=f'Leite *{leite}*\nCusto: {leiteValor:,}\nAtraia 1 gato por segundo.')
-    botao4.config(text=f'Ração *{racao}*\nCusto: {racaoValor:,}\nAtraia 10 gatos por segundo.')
-    botao5.config(text=f'Sardinha *{sard}*\nCusto: {sardValor:,}\nAtraia 100 gatos por segundo.')
+    #Atualizar Valores de Produção
+    label1.config(text=f"{gatos:,}\nGatos".replace(",","."))
+    label5.config(text=f"Gatos por Cliques: {clique:,}".replace(",","."))
+    label6.config(text=f"Gatos por Segundo: {gsegundo:,}".replace(",","."))
 
+
+    #Desabilitar Botões de Upgrades
     botao2.config(state=DISABLED)
     botao3.config(state=DISABLED)
     botao4.config(state=DISABLED)
     botao5.config(state=DISABLED)
+    botao6.config(state=DISABLED)
 
+
+    #Obter Preços
+    catloverValor = obterValor("AmantGatos")
+    leiteValor = obterValor("lp")
+    racaoValor = obterValor("rp")
+    sardValor = obterValor("sp")
+    cientistaValor = obterValor("cientista")
+
+
+    #Atualização dos Preços (Caso o valor seja muito grande, ele será encurtado)
+    if  catloverValor >= 1000000000000:
+        botao2.config(text=f'Amante de Gatos / Click x{AmantGatos:,}\nCusto: {catloverValor:.2e}\nGanhe 2x mais gatos por clique.'.replace(",","."))
+    else:
+        botao2.config(text=f'Amante de Gatos / Click x{AmantGatos:,}\nCusto: {catloverValor:,}\nGanhe 2x mais gatos por clique.'.replace(",","."))
+
+    if  leiteValor >= 1000000000000:
+        botao3.config(text=f'Leite *{leite}*\nCusto: {leiteValor:.2e}\nAtraia 1 gato por segundo.'.replace(",","."))
+    else:
+        botao3.config(text=f'Leite *{leite}*\nCusto: {leiteValor:,}\nAtraia 1 gato por segundo.'.replace(",","."))
+    
+    if racaoValor >= 1000000000000:
+        botao4.config(text=f'Ração *{racao}*\nCusto: {racaoValor:.2e}\nAtraia 10 gatos por segundo.'.replace(",","."))
+    else:
+        botao4.config(text=f'Ração *{racao}*\nCusto: {racaoValor:,}\nAtraia 10 gatos por segundo.'.replace(",","."))
+
+    if sardValor >= 1000000000000:  
+        botao5.config(text=f'Sardinha *{sard}*\nCusto: {sardValor:.2e}\nAtraia 100 gatos por segundo.'.replace(",","."))
+    else:
+        botao5.config(text=f'Sardinha *{sard}*\nCusto: {sardValor:,}\nAtraia 100 gatos por segundo.'.replace(",","."))
+    
+    if cientistaValor >=1000000000000:
+        botao6.config(text=f'Cientista de Gatos *{cientista}*\nCusto: {cientistaValor:.2e}\nSeu clique valhe 1 a mais.'.replace(",","."))
+    else:
+        botao6.config(text=f'Cientista de Gatos *{cientista}*\nCusto: {cientistaValor:,}\nSeu clique valhe 1 a mais.'.replace(",","."))
+
+
+    #Reveladores de Botões
     if gatos == 1 and stop == 0:
         stop += 1
+        botaocm1.config(state=DISABLED)
         label2.destroy()
+        timer()
 
-    if AmantGatos >= 2 and stop == 1:
+    if cientista >= 1 and stop == 1:
         stop += 1
         frame1.destroy()
         frame2.destroy()
@@ -48,7 +85,15 @@ def cats():
     if racao >=1 and stop == 3:
         stop += 1
         frame5.destroy()
+    
+    if sard >= 1 and stop == 4:
+        stop += 1
+        label4.destroy()
+        frame6.destroy()
+    
 
+
+    #Faz com que os Botões dos Upgrades Compraveis sejam Clicáveis
     if endgame == 0 or endgame  == 2:
         if gatos >= catloverValor:
             botao2.config(state=NORMAL)
@@ -61,50 +106,173 @@ def cats():
         
         if gatos >= sardValor:
             botao5.config(state=NORMAL)
+        
+        if gatos >= cientistaValor:
+            botao6.config(state=NORMAL)
 
+
+#Multiplicadores de preço
+def obterValor(valorde):
+    resultado = 0
+
+    if valorde == "AmantGatos":
+        ppAG = AmantGatos
+        desejoTer = ppAG + cQtd
+
+        somatoria = []
+        while ppAG < desejoTer:
+            ppAG += 1
+            somatoria.append(int(ppAG))
+
+        for x in somatoria:
+            somar = int(22.5*1.5**x)
+            resultado = somar + resultado
+
+    if valorde == "lp":
+        pplp = lp
+        desejoTer = pplp + cQtd
+
+        somatoria = []
+        while pplp < desejoTer:
+            pplp += 1
+            somatoria.append(int(pplp))
+
+        for x in somatoria:
+            somar = int(10*1.15**x)
+            resultado = somar + resultado
+
+    if valorde == "rp":
+        pprp = rp
+        desejoTer = pprp + cQtd
+
+        somatoria = []
+        while pprp < desejoTer:
+            pprp += 1
+            somatoria.append(int(pprp))
+
+        for x in somatoria:
+            somar = int(100*1.15**x)
+            resultado = somar + resultado
+
+    if valorde == "sp":
+        ppsp = sp
+        desejoTer = ppsp + cQtd
+
+        somatoria = []
+        while ppsp < desejoTer:
+            ppsp += 1
+            somatoria.append(int(ppsp))
+
+        for x in somatoria:
+            somar = int(1000*1.15**x)
+            resultado = somar + resultado
+
+    if valorde == "cientista":
+        cp = cientista
+        desejoTer = cp + cQtd   
+
+        somatoria = []
+        while cp < desejoTer:
+            cp += 1
+            somatoria.append(int(cp))
+        for x in somatoria:
+            somar = int((10)**x)
+            resultado = somar + resultado
+
+    return resultado
+
+
+#Funções dos Botões
 def catclick():
-    global gatos
-
+    global gatos, clique
+    
     if endgame == 0 or endgame == 2:
         if gatos >= 8000000000 and endgame!= 2:
             finalg()
         
-        gatos += AmantGatos
+        gatos += clique
         cats()
 
 def catlover():
     global AmantGatos, gatos, catloverValor
 
-    AmantGatos *= 2
+    AmantGatos *= 2*(cQtd)
     gatos -= catloverValor
-    catloverValor = int(50*(AmantGatos)**1.3)
     cats()
 
 def catmilk():
-    global leite, leiteValor, gatos
+    global leite, leiteValor, gatos, lp
 
-    leite += 1
+    leite += 1*(cQtd)
+    if leite != 0 and leite != 1:
+        lp = leite
+    else:
+        lp += 0.5
+
     gatos -= leiteValor
-    leiteValor = int(10*(leite)**1.5+(9+leite/leite))
     cats()
 
 def catrac():
-    global racaoValor, racao, gatos
+    global racaoValor, racao, gatos, rp
     
-    racao += 1
+    racao += 1*(cQtd)
+    if racao != 0 and racao != 1:
+        rp = racao
+    else:
+        rp += 0.5
+
     gatos -= racaoValor
-    racaoValor = int(100*(racao)**1.4+(99+racao/racao))
     cats()
 
 def catsard():
-    global sardValor, sard, gatos
+    global sardValor, sard, gatos,sp
 
-    sard += 1
+    sard += 1*(cQtd)
+    if sard != 0 and sard != 1:
+        sp = sard
+    else:
+        sp += 0.5
+    
     gatos -= sardValor
-    sardValor = int(1000*(sard)**1.3+(999+sard/sard))
     cats()
 
+def catcience():
+    global cientistaValor, cientista, gatos
 
+    cientista += 1*(cQtd)
+    gatos -= cientistaValor
+
+    cats()
+    pass
+
+
+#Switchs dos Botões de escolher Quantidade
+def comprarQtd(Qtd):
+    global cQtd
+
+    if Qtd == 1:
+        cQtd = 1
+        botaocm1.config(state=DISABLED)
+        botaocm2.config(state=NORMAL)
+        botaocm3.config(state=NORMAL)
+        cats()
+
+    elif Qtd == 10:
+        cQtd = 10
+        botaocm1.config(state=NORMAL)
+        botaocm2.config(state=DISABLED)
+        botaocm3.config(state=NORMAL)
+        cats()
+
+    elif Qtd == 100: 
+        cQtd = 100
+        botaocm1.config(state=NORMAL)
+        botaocm2.config(state=NORMAL)
+        botaocm3.config(state=DISABLED)
+        cats()
+
+
+#Final do Jogo
 def escolheu(escolha):
     global endgame
     if escolha == "continuar":
@@ -136,7 +304,7 @@ def finalg():
     finallabel1.pack(pady=5)
 
     finallabel4 = tk.Label(
-    final, text=f"Humanos: 8,000,000,000.\nGatos: {gatos:,}+",
+    final, text=f"Humanos: 8,000,000,000.\nGatos: {gatos:,}+".replace(",","."),
     font=(None,15), bg="black",fg="red"
     )
     finallabel4.pack(pady=5)
@@ -173,7 +341,7 @@ def finalg():
     parar.grid(column=1,row=0,sticky=tk.E,padx=30)
 
 
-#Timer
+#Cronômetro
 def timer():
     global  h, m, s, gatos
     if endgame == 0 or endgame == 2:
@@ -190,9 +358,9 @@ def timer():
         if gatos >= 8000000000 and endgame != 2:
             finalg()
 
-        label1.config(text=f"{gatos:,}\nGatos")
+        label1.config(text=f"{gatos:,}\nGatos".replace(",","."))
         tempo = (f"{h:02d}:{m:02d}:{s:02d}")
-        label3.config(text=tempo)
+        label3.config(text=tempo,font=(None,20))
         label3.after(1000, timer)
         cats()
 
@@ -229,7 +397,7 @@ root.resizable(False,True)
 #UI
 label1 = tk.Label(
     root,fg="red",bg="black",
-    font=(None,30),text=f"{gatos:,}\nGatos"
+    font=(None,30),text=f"{gatos:,}\nGatos".replace(",",".")
 )
 label1.grid(column=1, row=0, sticky=tk.N, padx=10, pady=30)
 
@@ -240,10 +408,42 @@ label2 = tk.Label(
 label2.grid(column=1,row=0,sticky=tk.N)
 
 label3 = tk.Label(
-    root,bg="red",fg="black",border=50,
+    root,bg="red",fg="black",border=50,width=10,height=1,
+    text="Objetivo:\nAtrair\n8.000.000.000\nGatos",
     font=(None,20)
 )
 label3.grid(column=0,row=0,sticky=tk.N)
+
+botaocm1 = tk.Button(
+    root,text="1",width=3,
+    bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
+    font=(None,13),
+    command=lambda: comprarQtd(1)
+)
+botaocm1.grid(column=2,row=0,sticky=tk.SW,pady=40,padx=120)
+
+botaocm2 = tk.Button(
+    root,text="10",width=3,
+    bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
+    font=(None,13),
+    command=lambda: comprarQtd(10)
+)
+botaocm2.grid(column=2,row=0,sticky=tk.S,pady=40,padx=120)
+
+botaocm3 = tk.Button(
+    root,text="100",width=3,
+    bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
+    font=(None,13),
+    command=lambda: comprarQtd(100)
+)
+botaocm3.grid(column=2,row=0,sticky=tk.SE,pady=40,padx=120)
+
+labelcm = tk.Label(
+    root,text="Comprar",width=7,
+    bg="red",fg="black",borderwidth=0.5,activebackground="#151515",
+    font=(None,30)
+)
+labelcm.grid(column=2,row=0,sticky=tk.N,pady=15)
 
 label4 = tk.Label(
     root,bg="red",fg="black",border=50,width=22,
@@ -255,7 +455,7 @@ botao1 = tk.Button(
     root,background="black",foreground="black", activebackground="black",
     image=gatoimage,
     command=catclick,
-    borderwidth=0
+    borderwidth=0, width=200
 )
 botao1.grid(column=1, row=1, sticky=tk.W,padx=100)
 
@@ -266,11 +466,11 @@ botao2 = tk.Button(
     command=catlover,
     state=DISABLED
 )
-botao2.grid(column=2, row=1, sticky=tk.S, padx=5, pady=5)
+botao2.grid(column=2, row=5, sticky=tk.S, padx=5, pady=5)
 
 label5 = tk.Label(
-    root,bg="red",fg="black",border=20,width=20,
-    font=(None,20),text=f"Gatos por Cliques:{AmantGatos:,}"
+    root,bg="red",fg="black",border=20, width=20,
+    font=(None,20),text=f"Gatos por Cliques:{clique:,}".replace(",",".")
 )
 label5.grid(column=1, row=2, sticky=tk.N, padx=5, pady=5)
 
@@ -294,7 +494,7 @@ frame2 = tk.Frame(
 frame2.grid(column=2, row=2, sticky=tk.N, padx=5, pady=5)
 
 botao4 = tk.Button(
-    root, text=f'Ração\nCusto: {racaoValor:,}\nAtraia 10 gatos por segundo.',
+    root, text=f'Ração\nCusto: {racaoValor:,}\nAtraia 10 gatos por segundo.'.replace(",","."),
     font=(None,15), bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
     height=3,width=40,
     command=catrac,
@@ -308,8 +508,8 @@ frame3 = tk.Frame(
 frame3.grid(column=2, row=3, sticky=tk.N, padx=5, pady=5)
 
 label6 = tk.Label(
-    root,bg="red",fg="black",border=20,width=20,
-    font=(None,20),text=f"Gatos por Segundo:{gsegundo:,}"
+    root,bg="red",fg="black",border=20, width=20,
+    font=(None,20),text=f"Gatos por Segundo:{gsegundo:,}".replace(",",".")
 )
 label6.grid(column=1, row=3, sticky=tk.N, padx=5, pady=5)
 
@@ -319,7 +519,7 @@ frame4 = tk.Frame(
 frame4.grid(column=1, row=3, sticky=tk.N, padx=5, pady=5)
 
 botao5 = tk.Button(
-    root, text=f'Sardinha\nCusto: {sardValor:,}\nAtraia 100 gatos por segundo.',
+    root, text=f'Sardinha\nCusto: {sardValor:,}\nAtraia 100 gatos por segundo.'.replace(",","."),
     font=(None,15), bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
     height=3,width=40,
     command=catsard,
@@ -332,5 +532,20 @@ frame5 = tk.Frame(
 )
 frame5.grid(column=2, row=4, sticky=tk.N, padx=5, pady=5)
 
-timer()
+botao6 = tk.Button(
+    root, text=f'Cientista de Gatos\nCusto: {cientistaValor:,}\nSeu clique valhe 1 a mais.'.replace(",","."),
+    font=(None,15), bg="#151515",fg="red",borderwidth=0.5,activebackground="#151515",
+    height=3,width=40,
+    command=catcience,
+    state=DISABLED
+)
+botao6.grid(column=2, row=1, sticky=tk.S, padx=5, pady=5)
+
+frame6 = tk.Frame(
+    root,width=445,height=100,bg="black"
+)
+frame6.grid(column=2, row=5, sticky=tk.N, padx=5, pady=5)
+
+
+cats()
 root.mainloop()

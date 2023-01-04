@@ -2,7 +2,7 @@ Objetivo principal: ser um jogo clicker onde o objetivo é fazer o número de ga
 
 Requisitos:
 -Ter elementos clickers e idles.
--Ter um cronómetro.
+-Ter um cronômetro.
 -Formas de aumentar a produção ( UPGRADES ).
 -Ter um fim.
 -Ser no mínimo balanceado
