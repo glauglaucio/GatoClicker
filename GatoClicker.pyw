@@ -4,7 +4,7 @@ import os
 
 
 #Variaveis
-gatos = clique = resultado = endgame = gsegundo = leite = racao = sard = cientista = h = s = m = leiteValor = catloverValor = racaoValor = sardValor = cientistaValor =stop = 0
+gatos = clique = resultado = endgame = gsegundo = leite = racao = sard = cientista = h = s = m = leiteValor = qAmanteGatos =catloverValor = racaoValor = sardValor = cientistaValor =stop = 0
 AmantGatos = Qtd = cQtd = lp = rp = sp = 1
 
 
@@ -116,7 +116,7 @@ def obterValor(valorde):
     resultado = 0
 
     if valorde == "AmantGatos":
-        ppAG = AmantGatos
+        ppAG = qAmanteGatos
         desejoTer = ppAG + cQtd
 
         somatoria = []
@@ -125,7 +125,8 @@ def obterValor(valorde):
             somatoria.append(int(ppAG))
 
         for x in somatoria:
-            somar = int(22.5*1.5**x)
+            print(x)
+            somar = int((10)**x)
             resultado = somar + resultado
 
     if valorde == "lp":
@@ -176,7 +177,7 @@ def obterValor(valorde):
             cp += 1
             somatoria.append(int(cp))
         for x in somatoria:
-            somar = int((10)**x)
+            somar = int(7*1.5**x)
             resultado = somar + resultado
 
     return resultado
@@ -194,8 +195,9 @@ def catclick():
         cats()
 
 def catlover():
-    global AmantGatos, gatos, catloverValor
+    global AmantGatos, gatos, catloverValor, qAmanteGatos
 
+    qAmanteGatos += 1*(cQtd)
     AmantGatos *= 2*(cQtd)
     gatos -= catloverValor
     cats()
