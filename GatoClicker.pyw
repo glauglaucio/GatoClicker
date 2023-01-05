@@ -125,7 +125,6 @@ def obterValor(valorde):
             somatoria.append(int(ppAG))
 
         for x in somatoria:
-            print(x)
             somar = int((10)**x)
             resultado = somar + resultado
 
